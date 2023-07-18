@@ -1,0 +1,14 @@
+# ninja log v5
+16	451	7113625561262623	build.ninja	446e4f5454c0b355
+29	1655	7112910901681020	CMakeFiles/MemCacherLib.dir/src/MemCacher.cpp.obj	7bdbbe12daf549cb
+43	1918	7112912149009268	example/CMakeFiles/test_MemCacher.dir/test_MemCacher.cpp.obj	709435efbec9879e
+205	301	7112912378598915	MemCacherLib.lib	1fc22b2995fcfef5
+22	204	7112912377650924	CMakeFiles/MemCacherLib.dir/src/my_utils.cpp.obj	d518f969207efb3f
+301	606	7112912381602771	example/test_MemCacher.exe	3f018efc3561350
+25	1518	7112912144967302	CMakeFiles/MemCacherLib.dir/src/FileDB.cpp.obj	b5e4b68005cce0e0
+45	741	7113625871293510	CMakeFiles/MemCacherLib.dir/src/my_utils.cpp.obj	a45237251aa535c1
+35	1628	7113625880125809	CMakeFiles/MemCacherLib.dir/src/FileDB.cpp.obj	423e17253b6b38ab
+25	1808	7113625881978249	CMakeFiles/MemCacherLib.dir/src/MemCacher.cpp.obj	72ff16372356c02a
+1808	1910	7113625883002630	MemCacherLib.lib	1fc22b2995fcfef5
+54	2016	7113625884005024	example/CMakeFiles/test_MemCacher.dir/test_MemCacher.cpp.obj	511645a338e451d
+2017	2485	7113625888711415	example/test_MemCacher.exe	3f018efc3561350

@@ -1,0 +1,12 @@
+C:/Developer/WolfLab/MemCacher/build/x64-release/CMakeFiles/MemCacherLib.dir
+C:/Developer/WolfLab/MemCacher/build/x64-release/CMakeFiles/edit_cache.dir
+C:/Developer/WolfLab/MemCacher/build/x64-release/CMakeFiles/rebuild_cache.dir
+C:/Developer/WolfLab/MemCacher/build/x64-release/CMakeFiles/list_install_components.dir
+C:/Developer/WolfLab/MemCacher/build/x64-release/CMakeFiles/install.dir
+C:/Developer/WolfLab/MemCacher/build/x64-release/CMakeFiles/install/local.dir
+C:/Developer/WolfLab/MemCacher/build/x64-release/example/CMakeFiles/test_MemCacher.dir
+C:/Developer/WolfLab/MemCacher/build/x64-release/example/CMakeFiles/edit_cache.dir
+C:/Developer/WolfLab/MemCacher/build/x64-release/example/CMakeFiles/rebuild_cache.dir
+C:/Developer/WolfLab/MemCacher/build/x64-release/example/CMakeFiles/list_install_components.dir
+C:/Developer/WolfLab/MemCacher/build/x64-release/example/CMakeFiles/install.dir
+C:/Developer/WolfLab/MemCacher/build/x64-release/example/CMakeFiles/install/local.dir
