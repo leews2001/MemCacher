@@ -1,7 +1,7 @@
 //
 // main.cpp - Example Read/Write test program for MemCacher 
 //
-
+#include <windows.h>
 #include "my_utils.h"
 #include "MemCacher.h"
 
@@ -25,7 +25,7 @@ void readerThread(
     while (_input >> _pos) {
         std::string _item;
         verbose( "[Read] pos: %d\n", _pos);
-        if (0 == cache_.read_item(_pos, _input, _item)) {
+        if (0 == cache_.read_item(_pos, _item)) {
             _output << _item << " " << "Cache" << std::endl; 
         
         } else {
@@ -82,16 +82,19 @@ int main(int argc, char* argv[])
 
 
     //-- use preload
-    MemCacher cache((unsigned int)cacheSize, true);
+    bool _b_preload_file = true;
+    bool _b_cache_write_around_mode = true;
+
+    MemCacher _cacher((unsigned int)cacheSize, _b_preload_file);
+    _cacher.set_write_around_mode(_b_cache_write_around_mode);
+
     //-- don't use preload
     //MemCacher cache((unsigned int)cacheSize, true);
 
-    if (cache.open_data_file(itemsFile) < 0) {
+    if (false == _cacher.open_data_file(itemsFile).has_value()) {
+        std::cerr << "[Main] Error: Cannot open <items_file: " << itemsFile << ">\n";
         return 1;
     }
-
-    //cache.load_file_to_main_mem(itemsFile);
-//    cache.set_item_file(itemsFile);
 
 
     //------------------------------------------------------
@@ -101,18 +104,23 @@ int main(int argc, char* argv[])
     // Start reader threads
     std::ifstream readerList(readerFile);
     if (!readerList) {
-        std::cerr << "Error: <reader_file>  " << readerFile << " does not exist\n";
+        std::cerr << "Error: Cannot open <reader_file: " << readerFile << ">\n";
         return 1;
     }
 
+    //------------------------------------------------------
     std::vector<std::thread> readerThreads;
 
     std::string readerName;
     while (std::getline(readerList, readerName)) {
         _readers_cnt++;
         std::string readerOutput = readerName + ".out.txt";
-        readerThreads.emplace_back(readerThread, readerName,  readerOutput, std::ref(cache));
+        readerThreads.emplace_back(readerThread, readerName, readerOutput, std::ref(_cacher));
     }
+
+    Sleep(100);
+
+    //------------------------------------------------------
 
     // Start writer threads
     std::ifstream writerList(writerFile);
@@ -121,17 +129,22 @@ int main(int argc, char* argv[])
 
     while (std::getline(writerList, writerName)) {
         _writers_cnt++;
-        writerThreads.emplace_back(writerThread, writerName, std::ref(cache));
+        writerThreads.emplace_back(writerThread, writerName, std::ref(_cacher));
     }
+
+   
 
 
     //------------------------------------------------------
 
-    // Wait for all threads to finish
+
     for (auto& readerThread : readerThreads) {
         readerThread.join();
     }
 
+
+
+    // Wait for all threads to finish
     for (auto& writerThread : writerThreads) {
         writerThread.join();
     }
@@ -139,10 +152,16 @@ int main(int argc, char* argv[])
     //------------------------------------------------------
     
     // flush the 'main memory' in MemCacher to file
-    cache.flush("out.txt");
+    _cacher.show_cache();
+    _cacher.update_invalid_cache();
+    _cacher.show_cache();
+
+    if (true == _b_preload_file) {
+        _cacher.flush("out.txt");
+    }
 
     std::cout << "[main] readers: " << _readers_cnt << ", writers: "<< _writers_cnt << std::endl;
-    cache.report();
+    _cacher.report();
 
     return 0;
 }

@@ -67,7 +67,10 @@ endif()
 add_library(${PROJECT_NAME} 
  incl/MemCacher.h
  src/MemCacher.cpp
- "src/FileDB.cpp" "incl/FileDB.h" "incl/my_utils.h" "src/my_utils.cpp")
+ incl/FileDB.h
+ src/FileDB.cpp
+ incl/my_utils.h
+ src/my_utils.cpp)
 
 # Include sub-projects.
 add_subdirectory ("example")
@@ -123,6 +126,8 @@ include(install) #run install.cmake located in CMAKE_MODULE_PATH (set on top)
 #endif()
 message("CMAKE_INSTALL_INCLUDEDIR= " ${CMAKE_INSTALL_INCLUDEDIR})
 message("CMAKE_CURRENT_SOURCE_DIR = " ${CMAKE_CURRENT_SOURCE_DIR})
+
+
 
 
 #############################

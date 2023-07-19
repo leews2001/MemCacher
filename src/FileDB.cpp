@@ -22,12 +22,12 @@ void FileDB::report()
 }
 
 
-char FileDB::open_data_file(const std::string& data_filename_)
+std::optional<char> FileDB::open_data_file(const std::string& data_filename_)
 {
 	if (!std::ifstream(data_filename_)) {
 		// error! file doesn't exist.
 		std::cerr << "[FileDB] Error: data file <" << data_filename_ << "> not found!\n";
-		return -1;
+		return std::nullopt;
 	}
 
 	m_data_filename = data_filename_;
@@ -43,21 +43,23 @@ char FileDB::open_data_file(const std::string& data_filename_)
 }
  
 
-char FileDB::flush_buffer_to_file(const std::string& out_filename_)
+std::optional <int>  FileDB::flush_buffer_to_file(const std::string& out_filename_)
 {
 	std::ofstream _out_file(out_filename_);
 
 	if (!_out_file) {
 		std::cerr << "[FileDB] Error: Cannot flush buffer to file <" << out_filename_ << ">, fail to open file\n";
-		return -1;
+		return std::nullopt;
 	}
 
 
 	//------------------
+	int _cnt = 0;
 	for (int _i = 1; _i < m_largest_item_key; _i++) {
 
 		if (m_preload_buffer.find(_i) != m_preload_buffer.end()) {
 			_out_file << m_preload_buffer[_i] << std::endl;
+			_cnt++;
 		}
 		else {
 			_out_file << std::endl;
@@ -66,63 +68,70 @@ char FileDB::flush_buffer_to_file(const std::string& out_filename_)
 
 	if (m_preload_buffer.find(m_largest_item_key) != m_preload_buffer.end()) {
 		_out_file << m_preload_buffer[m_largest_item_key];
+		_cnt++;
 	}
 	else {
 		_out_file << std::endl;
 	}
 
-	return 0;
+	return _cnt;
 }
 
 
-char FileDB::read_data(int pos_, std::string& rout_data_)
+std::optional<char>  FileDB::read_data(int pos_, std::string& rout_data_)
 {
-	char _retn = 0;
+	if (pos_ < 1) {
+		std::cerr << "[FileDB: read_data] Error! `pos_` must be greater than 0\n";
+		return std::nullopt;
+	}
 
 	if (true == mb_preload) {
-		_retn = x_read_buffer(pos_, rout_data_);
+		return x_read_buffer(pos_, rout_data_);
 	}
-	else {
-		_retn = x_read_file(pos_, rout_data_);
-	}
-
-	return _retn;
+ 
+	return x_read_file(pos_, rout_data_); 
 }
 
-char FileDB::x_read_buffer(int pos_, std::string& rout_data_)
+std::optional<char> FileDB::x_read_buffer(int pos_, std::string& rout_data_)
 {
 	if (m_preload_buffer.find(pos_) == m_preload_buffer.end()) {
 		std::cerr << "[FileDB] Err: No data exist for requested read position : " << pos_ << std::endl;
-		return -1;
+		return std::nullopt;
 	}
 
 	rout_data_ = m_preload_buffer[pos_];
 	return 0; 
 }
 
-char FileDB::x_read_file(int pos_, std::string& rout_data_)
+std::optional<char> FileDB::x_read_file(int pos_, std::string& rout_data_)
 {
 	if (!m_data_file) {
 		std::cerr << "[FileDB] Err: Item File not accessible\n";
-		return -1;
+		return std::nullopt;
 	}
 
-	char _retn = 0;
+	 
 
 	m_data_file.seekg(std::ios::beg);
 
 	std::string _read_line;
 	int _pos0 = 0;
+
+	bool _read = false;
 	while (std::getline(m_data_file, _read_line)) {
 		_pos0++;
 		if (pos_ == _pos0) {
 			rout_data_ = _read_line;
-			_retn = 1;
+			_read = true;
 			break;
 		}
 	}
 	//std::cout << " [Read] ret: " << _retn << " pos: " << pos_ << ", data: " << rout_data_ << std::endl;
-	return _retn;
+	if (!_read) {
+		return std::nullopt;
+	}
+
+	return 0;
 }
 
 
@@ -130,10 +139,15 @@ char FileDB::x_read_file(int pos_, std::string& rout_data_)
 
 char FileDB::write_data(int pos_, const std::string& data_)
 {
+	if (pos_ < 1) {
+		std::cerr << "[FileDB: write_data] Error! `pos_` must be greater than 0\n";
+		return -1;
+	}
+
 	char _retn = 0;
 
 	if (true == mb_preload) {
-		_retn = x_write_buffer(pos_, data_);
+		x_write_buffer(pos_, data_);
 	}
 	else {
 		_retn = x_write_file(pos_, data_);
@@ -148,28 +162,24 @@ char FileDB::write_data(int pos_, const std::string& data_)
 	return _retn;
 }
 
-char FileDB::x_write_buffer(int pos_, const std::string& data_)
+void FileDB::x_write_buffer(int pos_, const std::string& data_)
 {
 	m_preload_buffer[pos_] = data_;
-
-	if (pos_ > m_initial_largest_item_key) {
-		m_initial_largest_item_key = pos_;
-	} 
-	return 0;
+	return;
 }
 
 
 char FileDB::x_write_file(int pos_, const std::string& data_)
 {
-	if (!m_data_file) {
-		std::cerr << "Err: Item File not accessible\n";
+	if (!m_data_file.is_open()) {
+		std::cerr << "[FileDB][x_write_file] Error: Item File not accessible\n";
 		return -1;
 	}
 
 
 	std::ofstream _tmp_file("tmp.txt");
 	if (!_tmp_file) {
-		std::cerr << "[MemCacher] Error: unable to create temporary working file\n";
+		std::cerr << "[FileDB][x_write_file] Error: unable to create temporary working file\n";
 		return -1;
 	}
 
@@ -180,12 +190,28 @@ char FileDB::x_write_file(int pos_, const std::string& data_)
 	int _pos0 = 0;
 	while (std::getline(m_data_file, _read_line)) {
 		_pos0++;
+
+		bool _eof = m_data_file.eof();
+
 		if (_pos0 == pos_) {
-			_tmp_file << data_ << std::endl;
+			_tmp_file << data_;
 		}
 		else {
-			_tmp_file << _read_line << std::endl;
+			_tmp_file << _read_line;
 		}
+
+		if (!_eof) {
+			_tmp_file << std::endl;
+		}
+	}
+
+	// Writing position is beyond current eof of m_data_file, so continue...
+	if (pos_ > _pos0) {
+		while (_pos0 < pos_) {
+			_tmp_file << std::endl;
+			_pos0++;
+		}
+		_tmp_file << data_;  // no return line at last entry
 	}
 
 	m_data_file.close();
@@ -193,20 +219,19 @@ char FileDB::x_write_file(int pos_, const std::string& data_)
 
 	// Optionally, you can remove the original input file
 	std::remove(m_data_filename.c_str());
-	std::rename("tmp.txt", m_data_filename.c_str());
-
-	m_data_file.open(m_data_filename, std::ios::in | std::ios::out);
-	if (!m_data_file) {
-		std::cerr << "[FileDB] ReOpen Error: item file <" << m_data_filename << "\n";
+	if (0 != std::rename("tmp.txt", m_data_filename.c_str())) {
+		std::perror("[FileDB::x_write_file] Error renaming file");
 		return -1;
 	}
 
-	//	std::cout << "File updated successfully\n";
+	m_data_file.open(m_data_filename, std::ios::in | std::ios::out);
+	if (!m_data_file) {
+		std::cerr << "[FileDB::x_write_file] ReOpen Error: item file <" << m_data_filename << "\n";
+		return -1;
+	}
 
-
+	//std::cout << "File updated successfully\n";
 	return 0;
- 
-
 }
 
 

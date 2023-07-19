@@ -44,7 +44,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-The aim of this project is to develop a program that performs caching of frequently accessed items, where the size of the cache is quite small compared to the number of the items. 
+This project is to develop a simple concept program that performs caching of frequently accessed items, where the size of the cache is quite small compared to the number of the items. 
 
 * There are multiple readers and writers of items. Number of readers and writers comes from Readers and Writers file which is passed to the program from command line.
 * Design an efficient mechanism to retrieve items that are cached.
@@ -132,12 +132,22 @@ file.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+## Usage
+To use `Memcacher` in your C++ project, you need to include the `MemCacher.h` header file and link with the `Memcacher` object library.
 
 
 <!-- Project Details -->
  
-## Project Details
+## Project Design Details
 
+
+### Features
+
+- LRU (Least Recently Used) Cache: Memcacher uses the LRU algorithm to manage cache items, ensuring that the most recently accessed items are retained in memory while older, less frequently used items are evicted from the cache.
+
+- Read and Write Through Cache: The Memcacher supports read and write through caching, meaning it automatically loads data from disk when a cache miss occurs during read access and writes dirty cache items back to disk upon eviction.
+
+- Thread-Safe: Memcacher is designed to be thread-safe, allowing multiple threads to access the cache concurrently without causing data corruption or race conditions.
 
  
 
@@ -154,11 +164,9 @@ Then the other thread is launched in `SSDModel` class, which obtains an image da
 After, in the main thread, image data in "image queue" is retrieved one by one. In that loop, once in a certain number of frames the result of the detection is updated by popping from the queue in `SSDModel`. The result of the detection is drawn on the image data. The image is shown in a window.
 
 ### Files and Classes
-- `main.cpp`: Includes `main()` function.
+- `test_MemCacher.cpp`: Includes `main()` function.
   - Takes command line options and sets parameters into inner variables.
-  - Creates `image_queue` and `detection_queue`, creates `SSDModel` object and `Graphic` object, and calls functions in both objects which launch threads.
-  - In a loop, it reads image data from the queue, gets the result of detection, draws it on the image and show.
-
+  - Creates `MemCacher` object, creates and launch reader/ writer threads.
 
 - `Graphic.h` `Graphic.cpp`: Defines `Graphic` class.
   - Launchs a thread which reads the image file
@@ -182,13 +190,10 @@ After, in the main thread, image data in "image queue" is retrieved one by one. 
 ## Contents
 This repository contains:
 - `src/` : Source files listed above
-- `model/` : Files for the DNN model
-  - SSD MobileNet model file : `frozen_inference_graph.pb` (download *ssd_mobilenet_v2_coco* from [here](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md))
-  - SSD MobileNet config file : `ssd_mobilenet_v2_coco_2018_03_29.pbtxt` (download from [here](https://github.com/opencv/opencv_extra/tree/master/testdata/dnn))
-  - class file : `object_detection_classes_coco.txt` (download from [here](https://github.com/opencv/opencv/tree/master/samples/data/dnn))
-
-- `images/` : Sample photos and videos to test the program
-- `result/` : Examples of output images
+- `incl/`: Header files listed above 
+- `example` : Main program to use MemCacher
+- `data/` : Sample data files that can be used.
+- `tests/`: For unit-testing
 - `CMakeLists.txt` : cmake configuration file
 - `README.md` : This file
 
@@ -197,13 +202,17 @@ This repository contains:
 ## Contact
 Wei Siong (Garfield) Lee - weisiong.lee@gmail.com
 
-Project Link: [https://github.com/github_username/repo_name](https://github.com/github_username/repo_name)
+Project Link: [https://github.com/leews2001/MemCacher](https://github.com/leews2001/MemCacher)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 ## References
 * [Caching Strategies and How to Choose the Right One](https://codeahoy.com/2017/08/11/caching-strategies-and-how-to-choose-the-right-one/)
+
+* [Cache Replacement Policies](https://en.wikipedia.org/wiki/Cache_replacement_policies)
+
+* [Implement Least Recently-Used Cache](https://www.enjoyalgorithms.com/blog/implement-least-recently-used-cache)
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
