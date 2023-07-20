@@ -1,7 +1,6 @@
 
 <a name="readme-top"></a>
 
-[![Contributors][contributors-shield]][contributors-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
 <!-- PROJECT Banner -->
@@ -17,7 +16,7 @@
 
 
 <!-- TABLE OF CONTENTS -->
-<details>
+<details open>
   <summary>Table of Contents</summary>
   <ol>
     <li>
@@ -85,6 +84,8 @@ To get a local copy up and running follow these simple example steps.
 - ninja
     * The CMake support is directly integrated since Visual Studio 2017
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ### Requirements (Linux)
 - cmake
     * [CMake installation instructions](https://cmake.org/install/)
@@ -95,6 +96,8 @@ To get a local copy up and running follow these simple example steps.
 - clang, or gcc/ g++
     * Linux: clang, or gcc/ g++ is installed by default on most Linux distros
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ### Build (Windows)
 Launch Visual Studio:
 1. Select `Open a local folder`, and open the root directory (this repository).
@@ -103,6 +106,8 @@ Launch Visual Studio:
 
 Where `<preset_name>` can be one of the following configurations:
 * `x64-debug`,  `x64-release`, `x86-debug`, `x86-release`
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Build (Linux)
 In the root directory (this repository), execute the command below:
@@ -114,6 +119,8 @@ Where `<preset_name>` can be one of the following configurations:
 * Linux: `linux-debug`, `linux-release`
 
 The executable(`test_memcacher`) is created in the current directory(`build`).
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Run (Windows, Linux)
 
@@ -137,7 +144,6 @@ The executable(`test_memcacher`) is created in the current directory(`build`).
 * `<items_file>` is the actual data file for `cacher`. 
 
 
-
 Each line of the file is either blank or contains one number. The positions in the reader and writer files correspond to line numbers in the item file.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -153,13 +159,15 @@ Each line of the file is either blank or contains one number. The positions in t
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Usage
-To use `Memcacher` in your C++ project, you need to include the `MemCacher.h` header file and link with the `Memcacher` object library.
+To use `Memcacher` in your C++ project, you need to include the `MemCacher.h` header file and link with the `Memcacher` object library. (See `./example/cacher.cpp`)
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- Project Details -->
  
 ## Project Design Details
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Features
 
@@ -183,33 +191,35 @@ Then the other thread is launched in `SSDModel` class, which obtains an image da
 
 After, in the main thread, image data in "image queue" is retrieved one by one. In that loop, once in a certain number of frames the result of the detection is updated by popping from the queue in `SSDModel`. The result of the detection is drawn on the image data. The image is shown in a window.
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ### Files and Classes
-- `test_MemCacher.cpp`: Includes `main()` function.
-  - Takes command line options and sets parameters into inner variables.
-  - Creates `MemCacher` object, creates and launch reader/ writer threads.
+- `cacher.cpp`: `main()` to show usage of `MemCacher` class object.
+  - Reads command line options and filename parameters.
+  - Creates `MemCacher` object.
+  - Creates and launches reader thread(s).
+  - Creates and launches writer thread(s).
+  - Reader thread(s) output `Reader*.out.txt` files
+ 
+- `MemCacher.h` `MemCacher.cpp`:  Defines `MemCacher` class.
+  - Simple Cache object with predefined size.
+  - Creates `FileDB` object to access `items_file`.
+  - Supports `Write-through` and `Write-Around` mode.
+  - Store frequently accessed data in the cache.
+  - Use LRU scheme to swap out data when cache is full.
+  - Marks `dirty` cache data to be written to `FileDB`.
+  - Marks `invalid`cache data to be refreshed from `FileDB`.
 
-- `Graphic.h` `Graphic.cpp`: Defines `Graphic` class.
-  - Launchs a thread which reads the image file
-  - Draws the result of detection on the image
-  - Stores information about the image
-
-
-- `SSDModel.h` `SSDModel.cpp` : Defines `SSDModel` class.
-  - Loads the DNN model
-  - Launchs a thread which performs object detection
-  - Stores the result of detection in a queue, and retrieves it
-
-
-- `MessageQueue.h` : Define `MessageQueue` class.
-  - Holds a queue, and provides functions to send and receive frames using the queue.
-  - Provides functions which sends and receives the total number of frames sent
-
+- `FileDB.h` `FileDB.cpp`: Defines `FileDB` class.
+  - Simple file management object to handle data reading and writing request.
+  - Reads data from file, at a given line number.
+  - Write data to file, at a given line number. 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Repository Contents
 
-This repository contains folders:
+This repository contains:
 - `cmake/`: CMake scripts. 
 - `data/` : Sample data files that can be used.
 - `example` : Main program to use `MemCacher`
@@ -217,15 +227,14 @@ This repository contains folders:
 - `md_imgs/`: Image data for README.md
 - `src/` : Source files listed above
 - `tests/`: Source files for unit testing.
-
-
-
-- `tests/`: For unit-testing
+- `CMakePresets.json`: file to define and manage different build configurations for a cmake project.
 - `CMakeLists.txt` : cmake configuration file
 - `README.md` : This file
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ### Data Files
-The folder `./data` contains sample data files that can be use at jumpstart for testing. The files are as follows:
+The folder `data/` contains sample data files that can be use at jumpstart for testing. The files are as follows:
 
 * Items.txt, is a `items_file` which contains actual data. Each line of the file is either blank or contains one number. The first line in the file has position 1. Example contents of `items_file`:
 
@@ -283,6 +292,7 @@ The folder `./data` contains sample data files that can be use at jumpstart for 
     ```
     In the above example, there are 5 write operations. The last write operation being writing `800` to the line position `8`.
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTACT -->
 ## Contact
@@ -301,16 +311,13 @@ Project Link: [https://github.com/leews2001/MemCacher](https://github.com/leews2
 * [Implement Least Recently-Used Cache](https://www.enjoyalgorithms.com/blog/implement-least-recently-used-cache)
 
 * [How to Implement LRU Cache in Java](https://www.baeldung.com/java-lru-cache)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/github_username/repo_name.svg?style=for-the-badge
-[contributors-url]: https://github.com/github_username/repo_name/graphs/contributors
 [issues-shield]: https://img.shields.io/github/issues/github_username/repo_name.svg?style=for-the-badge
 [issues-url]: https://github.com/github_username/repo_name/issues
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/wei-siong-lee-8bb154141
 [product-screenshot]: images/screenshot.png
-[Bootstrap.com]: https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white
-[Bootstrap-url]: https://getbootstrap.com
-[JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
-[JQuery-url]: https://jquery.com 
