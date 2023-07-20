@@ -22,20 +22,30 @@
   <ol>
     <li>
       <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
     </li>
-    <li>
       <a href="#getting-started">Getting Started</a>
       <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
+        <li><a href="#requirements-windows">Requirements (Windows)</a></li>
+        <li><a href="#requirements-linux">Requirements (Linux)</a></li>
+        <li><a href="#build-windows">Build (Windows)</a></li>
+        <li><a href="#build-linux">Build (Linux)</a></li>
+        <li><a href="#run-windows-linux">Run (Windows, Linux)</a></li>
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li> 
-    <li><a href="#contributing">Contributing</a></li> 
+    <li><a href="#project-design-details">Project Design Details</a>
+    <ul>
+        <li><a href="#features">Features</a></li>
+    </ul>
+    </li>
+    <li>
+      <a href="#repository-contents">Repository Contents</a>
+      <ul>
+       <li><a href="#data-files">Data Files</a></li>
+      </ul>
+    </li>
     <li><a href="#contact">Contact</a></li> 
+    <li><a href="#references">References</a></li> 
   </ol>
 </details>
 
@@ -63,7 +73,8 @@ This project is to develop a simple concept program that performs caching of fre
 This is an example of how you may give instructions on setting up your project locally.
 To get a local copy up and running follow these simple example steps.
 
-### Requirements (Windows)
+<!-- Requirements (Windows) -->
+## Requirements (Windows)
 - clang
     * [Install Visual Studio 2022 C++](https://learn.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=msvc-170#visual-studio-2022-installation)
     * [Clang/LLVM support in Visual Studio projects: Installation](https://learn.microsoft.com/en-us/cpp/build/clang-support-msbuild?view=msvc-170#install-1)
@@ -83,65 +94,6 @@ To get a local copy up and running follow these simple example steps.
 
 - clang, or gcc/ g++
     * Linux: clang, or gcc/ g++ is installed by default on most Linux distros
-
-### Data Files
-The folder `./data` contains sample data files that can be use at jumpstart for testing. The files are as follows:
-
-* Items.txt, is a `items_file` which contains actual data. Each line of the file is either blank or contains one number. The first line in the file has position 1. Example contents of `items_file`:
-
-    ```
-  0
-  23.5
-  -33
-
-  75.2
-  45
-  90.0
-  100
-  8
-  9
-
-  10000.0
-  ```
-  Note: Line 4 and 11 is blank.
-
-* Readers.txt, is a `readers_file` which contains list of `reader` filenames to be read. Example contents of a `readers_file`:
-    ```
-    Reader1.txt
-    Reader2.txt
-    Reader3.txt
-    ```
-    In the above example, there are 3 `reader` files listed.
-
-* Reader1.txt, is a `reader` file which contains a list of line positions in `items_file` that it reads from. Example contents of a `reader`:
-    ```
-    1
-    3
-    5
-    7
-    1
-    3
-    5
-    7
-    ```
-    In the above example, the `reader` file shows data from line 1, 3, 5, 7, ... will be read.
-
-* Writers.txt, is a `writers_file` which contains list of `writer` filenames to be read. Example contents of a `writers_file`:
-    ```
-    Writer1.txt
-    Writer2.txt
-    ```
-    In the above example, there are 2 `writer` files listed.
- 
-* Writer1.txt, is a `writer` file which contain list of positions and the value to be written to either cache or file ( will be explained further later). Example contents of a `writer`:
-    ```
-    1 100
-    2 200
-    4 300
-    5 500
-    8 800
-    ```
-    In the above example, there are 5 write operations. The last write operation being writing `800` to the line position `8`.
 
 ### Build (Windows)
 Launch Visual Studio:
@@ -255,15 +207,81 @@ After, in the main thread, image data in "image queue" is retrieved one by one. 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Contents
-This repository contains:
-- `src/` : Source files listed above
-- `incl/`: Header files listed above 
-- `example` : Main program to use MemCacher
+## Repository Contents
+
+This repository contains folders:
+- `cmake/`: CMake scripts. 
 - `data/` : Sample data files that can be used.
+- `example` : Main program to use `MemCacher`
+- `incl/`: Header files listed above 
+- `md_imgs/`: Image data for README.md
+- `src/` : Source files listed above
+- `tests/`: Source files for unit testing.
+
+
+
 - `tests/`: For unit-testing
 - `CMakeLists.txt` : cmake configuration file
 - `README.md` : This file
+
+### Data Files
+The folder `./data` contains sample data files that can be use at jumpstart for testing. The files are as follows:
+
+* Items.txt, is a `items_file` which contains actual data. Each line of the file is either blank or contains one number. The first line in the file has position 1. Example contents of `items_file`:
+
+    ```
+  0
+  23.5
+  -33
+
+  75.2
+  45
+  90.0
+  100
+  8
+  9
+
+  10000.0
+  ```
+  Note: Line 4 and 11 is blank.
+
+* Readers.txt, is a `readers_file` which contains list of `reader` filenames to be read. Example contents of a `readers_file`:
+    ```
+    Reader1.txt
+    Reader2.txt
+    Reader3.txt
+    ```
+    In the above example, there are 3 `reader` files listed.
+
+* Reader1.txt, is a `reader` file which contains a list of line positions in `items_file` that it reads from. Example contents of a `reader`:
+    ```
+    1
+    3
+    5
+    7
+    1
+    3
+    5
+    7
+    ```
+    In the above example, the `reader` file shows data from line 1, 3, 5, 7, ... will be read.
+
+* Writers.txt, is a `writers_file` which contains list of `writer` filenames to be read. Example contents of a `writers_file`:
+    ```
+    Writer1.txt
+    Writer2.txt
+    ```
+    In the above example, there are 2 `writer` files listed.
+ 
+* Writer1.txt, is a `writer` file which contain list of positions and the value to be written to either cache or file ( will be explained further later). Example contents of a `writer`:
+    ```
+    1 100
+    2 200
+    4 300
+    5 500
+    8 800
+    ```
+    In the above example, there are 5 write operations. The last write operation being writing `800` to the line position `8`.
 
 
 <!-- CONTACT -->
