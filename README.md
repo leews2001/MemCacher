@@ -90,21 +90,25 @@ The CMake support is directly integrated since Visual Studio 2017.
 ### Requirements (Linux/Mac/Windows)
 - cmake
     * All OSes: [click here for installation instructions](https://cmake.org/install/)
-- make
-    * Linux: make is installed by default on most Linux distros
-    * Mac: [install Xcode command line tools to get make](https://developer.apple.com/xcode/features/)
-    * Windows: [Click here for installation instructions](http://gnuwin32.sourceforge.net/packages/make.htm)
-- gcc/g++
-    * Linux: gcc / g++ is installed by default on most Linux distros
+- ninja
+    * 
+- clang, or gcc/ g++
+    * Linux: clang, or gcc/ g++ is installed by default on most Linux distros
     * Mac: same deal as make - [install Xcode command line tools](https://developer.apple.com/xcode/features/)
     * Windows: recommend using [MinGW](http://www.mingw.org/)
 
 ### Build
 In the root directory (this repository), execute the command below:
 1. `mkdir build`
-2. `cd build`
-3. `cmake ..`
-4. `make`
+2. `cmake --preset <preset_name>`
+3. `cd build\<preset_name>`
+4. `ninja`
+
+
+Where <preset_name> can be one of the following, depending on your platform and needs:
+
+* Windows: `x64-debug`,  `x64-release`, `x86-debug`, `x86-release`
+* Linux: `linux-debug`, `linux-release`
 
 The executable(`test_memcacher`) is created in the current directory(`build`).
 

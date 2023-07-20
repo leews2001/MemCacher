@@ -1,7 +1,7 @@
 //
 // main.cpp - Example Read/Write test program for MemCacher 
 //
-#include <windows.h>
+//#include <windows.h>
 #include "my_utils.h"
 #include "MemCacher.h"
 
@@ -118,7 +118,6 @@ int main(int argc, char* argv[])
         readerThreads.emplace_back(readerThread, readerName, readerOutput, std::ref(_cacher));
     }
 
-    Sleep(100);
 
     //------------------------------------------------------
 

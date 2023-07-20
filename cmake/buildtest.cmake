@@ -2,8 +2,6 @@
 
 enable_testing()
 
- 
-
 
 ###google test
 if(1)
@@ -21,8 +19,9 @@ if(1)
     )
     FetchContent_MakeAvailable(googletest)
 
-    message ("CMAKE_RUNTIME_OUTPUT_DIRECTORY = " ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
-    message ("CMAKE_BINARY_DIR = " ${CMAKE_BINARY_DIR})
+    message("PROJECT_NAME = " ${PROJECT_NAME})
+    message("CMAKE_RUNTIME_OUTPUT_DIRECTORY = " ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+    message("CMAKE_BINARY_DIR = " ${CMAKE_BINARY_DIR})
     message("PROJECT_BINARY_DIR = " ${PROJECT_BINARY_DIR})
     message("googletest_SOURCE_DIR = " ${googletest_SOURCE_DIR})
     
@@ -58,66 +57,7 @@ if(1)
     )
 
     include(GoogleTest)
+
+    # Note: in linux gtest seems to generate cmake files with quotes.
     gtest_discover_tests(${PROJECT_NAME}_Tests)
-endif()
-
-###QTest#####
-if(0)
-    find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Test REQUIRED)
-
-    add_executable(${PROJECT_NAME}QTests
-        tests/main.cpp
-        tests/framework/VectorFQTests.h
-        tests/framework/VectorFQTests.cpp
-        tests/framework/WayptQTests.h
-        tests/framework/WayptQTests.cpp
-        tests/framework/SegmentQTests.h
-        tests/framework/SegmentQTests.cpp
-        tests/framework/PlanQTests.h
-        tests/framework/PlanQTests.cpp
-        tests/framework/PlanHelperQTests.h
-        tests/framework/PlanHelperQTests.cpp
-        tests/framework/UblasHelperQTests.h
-        tests/framework/UblasHelperQTests.cpp
-        tests/framework/EllMapQTests.h
-        tests/framework/EllMapQTests.cpp
-
-        tests/framework/algorithm/gjk/PolygonQTests.h
-        tests/framework/algorithm/gjk/PolygonQTests.cpp
-        )
-
-    target_include_directories(${PROJECT_NAME}QTests PRIVATE
-        ./
-        ./incl/${PROJECT_NAME}/
-        ./incl/${PROJECT_NAME}/framework
-        ./incl/${PROJECT_NAME}/framework/algorithm
-        ./incl/${PROJECT_NAME}/framework/algorithm/gjk
-        ./incl/${PROJECT_NAME}/controllers
-        ./incl/${PROJECT_NAME}/models
-        ./pimpl/${PROJECT_NAME}/framework
-        ./pimpl/${PROJECT_NAME}/framework/algorithm
-        ./pimpl/${PROJECT_NAME}/controllers
-        ./pimpl/${PROJECT_NAME}/models
-        ./tests
-        ./tests/framework
-        ./tests/framework/algorithm
-        ./tests/framework/algorithm/gjk
-        ./tests/controllers
-        ./tests/models
-        ${Boost_INCLUDE_DIRS}
-        )
-
-
-    target_link_libraries(
-        ${PROJECT_NAME}QTests
-        Qt::Test
-        Qt::Core
-        Qt::Gui
-        Qt::Network
-        Qt::Widgets
-        ${PROJECT_NAME}
-        )
-
-
-    add_test(NAME ${PROJECT_NAME}QTests COMMAND ${PROJECT_NAME}QTests)
 endif()

@@ -39,6 +39,7 @@
             "BUILD_TESTING": false
           }
         },
+
         {
             "name": "x86-debug",
             "displayName": "x86 Debug",
@@ -57,17 +58,18 @@
             "displayName": "x86 Release",
             "inherits": "x86-debug",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release"
-            }
+            "CMAKE_BUILD_TYPE": "Release",
+            "BUILD_TESTING": true
+          }
         },
         {
-            "name": "linux-debug",
-            "displayName": "Linux Debug",
+            "name": "linux-release",
+            "displayName": "Linux Release",
             "generator": "Ninja",
             "binaryDir": "${sourceDir}/build/${presetName}",
             "installDir": "${sourceDir}/install/${presetName}",
           "cacheVariables": {
-            "CMAKE_BUILD_TYPE": "Debug",
+            "CMAKE_BUILD_TYPE": "Release",
             "BUILD_TESTING": true
           },
             "condition": {
@@ -82,8 +84,8 @@
             }
         },
         {
-            "name": "macos-debug",
-            "displayName": "macOS Debug",
+            "name": "macos",
+            "displayName": "macOS",
             "generator": "Ninja",
             "binaryDir": "${sourceDir}/build/${presetName}",
             "installDir": "${sourceDir}/install/${presetName}",
