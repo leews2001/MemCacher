@@ -34,6 +34,7 @@
     <li><a href="#usage">Usage</a></li> 
     <li><a href="#project-design-details">Project Design Details</a>
     <ul>
+        <li><a href="#assumptions">Assumptions</a></li>
         <li><a href="#features">Features</a></li>
     </ul>
     </li>
@@ -53,6 +54,8 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
+This is the given assignment:
+```
 This project is to develop a simple concept program that performs caching of frequently accessed items, where the size of the cache is quite small compared to the number of the items. 
 
 * There are multiple readers and writers of items. Number of readers and writers comes from Readers and Writers file which is passed to the program from command line.
@@ -61,7 +64,7 @@ This project is to develop a simple concept program that performs caching of fre
 * Handle the case of dirty cache item, where a writer is modifying the item that is already cached.
 * Your program should handle all corner cases and robust to failures. If it fails, it should fail gracefully giving out meaningful failure messages.
 * List out all the assumptions you have made for any unclear requirements.
-
+```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -168,6 +171,27 @@ To use `Memcacher` in your C++ project, you need to include the `MemCacher.h` he
 ## Project Design Details
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### Assumptions
+The following assumptions are made:
+
+- The first line in the `items_file` is taken to be position `1`. Therefore, the keys associated with each paired string data must be an integer greater than zero.
+
+- Since the given `items_file` example shows blank lines, we shall assume the data read from cache or file can be a empty string.
+ 
+- Subsquently, the data written to cache or file can be a empty string.
+
+- When the maximum lines in `items_file` is N, and a data write request is made at M-th position, where M > N; then the lines in the range (N,M) shall be blanks.
+ 
+- When the maximum lines in `items_file` is N, and a data read request is made at M-th position, where M > N; then an error should be raised.
+
+- When writing a string at the last line in `items_file`, it shall not end with a newline character. This is to avoid a new blank line being added to the `items_file`.
+
+- When a position value read from `readers` file is less than 1, the read request shall be ignored.
+
+- When a position value read from `writers` file is less than 1, the write request shall be ignored.
+
+
 
 ### Features
 

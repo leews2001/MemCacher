@@ -24,12 +24,20 @@ void readerThread(
     std::cout << "[Read] thread "<< inputFile_<<"\n";
     while (_input >> _pos) {
         std::string _item;
-        verbose( "[Read] pos: %d\n", _pos);
-        if (0 == cache_.read_item(_pos, _item)) {
+        char _retn0 = cache_.read_item(_pos, _item);
+        
+        //verbose( "[Read] pos:%d , ret:%d\n", _pos, (int) _retn0);
+
+
+        if (0 == _retn0) {
             _output << _item << " " << "Cache" << std::endl; 
         
-        } else {
+        } else if( 1 == _retn0) {
             _output << _item << " " << "Disk" << std::endl; 
+        }
+        else {
+            //--- error reading, shall not write anything to _output
+            std::cerr << "[Read: " << inputFile_ << "] Error reading pos: " << _pos << "\n";
         }
     }
 
@@ -49,7 +57,7 @@ void writerThread(const std::string& inputFile, MemCacher& cache_)
     std::string _data;
 
     while (input >> _pos >>  _data) {
-        //std::cout << "[Write][" << _pos << "]: " << _data << std::endl;
+        //verbose("[Write] pos:%d, data:%s\n", _pos, _data.c_str();
         cache_.write_item( _pos, _data);
     }
 
