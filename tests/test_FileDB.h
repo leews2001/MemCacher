@@ -7,44 +7,51 @@
 #include "test_helper.h"
 
 
-//--------------------------------------------------------------------------------
+//
 // Test for FileDB class object
+//
 
+//--------------------------------------------------------------------------------
+/// @brief Test for FileDB configuration settings.
 TEST(FDB_BasicTest, Config)
 {
     FileDB _fdb;
 
-    // Check default
+    // Check default preload mode is false
     EXPECT_EQ(_fdb.preload_mode(), false);
 
+    // Check setting and query of preload mode
     _fdb.set_preload_mode(true);
     EXPECT_EQ(_fdb.preload_mode(), true);
 
     _fdb.set_preload_mode(false);
     EXPECT_EQ(_fdb.preload_mode(), false);
 }
-
+//--------------------------------------------------------------------------------
+/// @brief Test for FileDB file I/O operations.
 TEST(FDB_BasicTest, FileIO)
 {
     FileDB _fdb;
     std::string _eg_items("example_items.txt");
     std::remove(_eg_items.c_str());
 
+    // Check error handling of non-existing file
     {
         EXPECT_EQ(_fdb.open_data_file(_eg_items), std::nullopt);
     }
-    //
+
 
     int _cnt = create_items_file(_eg_items);
     ASSERT_GE(_cnt, 0);
-
+    
+    // Check correct opening of existing file
     {
         EXPECT_NE(_fdb.open_data_file(_eg_items), std::nullopt);
     }
 
-    {   // Check that when FileDB is not using `preload` mode,
-        // flushing the buffer to disk will give us empty file.
-
+    // Check that when FileDB is not using `preload` mode,
+    // flushing the buffer to disk will give us empty file.
+    {   
         std::string _flush_filename("flush.out.txt");
         std::remove(_flush_filename.c_str()); // Clean up: Delete the test file, in case
 
@@ -55,10 +62,10 @@ TEST(FDB_BasicTest, FileIO)
         std::remove(_flush_filename.c_str());   // Clean up: Delete the test file
     }
 
+    
+    // Check that when FileDB is using `preload` mode,
+    // immediate flushing the buffer to disk give correct number of items preloaded.
     {
-        // Check that when FileDB is using `preload` mode,
-        // immediate flushing the buffer to disk give correct number of items preloaded.
-
         std::string _flush_filename("flush.out.txt");
         std::remove(_flush_filename.c_str());  // Clean up: Delete the test file, in case
 
@@ -68,13 +75,13 @@ TEST(FDB_BasicTest, FileIO)
 
         ASSERT_EQ(cmp_text_files(_eg_items, _flush_filename), 1);
 
-
         std::remove(_flush_filename.c_str());  // Clean up: Delete the test file
     }
 
 }
 
-
+//--------------------------------------------------------------------------------
+/// @brief Test for FileDB write operations.
 TEST(FDB_BasicTest, Write_Ops)
 {
     FileDB _fdb;
@@ -113,8 +120,9 @@ TEST(FDB_BasicTest, Write_Ops)
     }
 }
 
-
-TEST(FDB_BasicTest, Read_Ops)
+//--------------------------------------------------------------------------------
+/// @brief Test for FileDB read operations.
+TEST(FDB_BasicTest, ReadOps)
 {
     FileDB _fdb;
     std::string _eg_items("example_items.txt");
@@ -122,7 +130,7 @@ TEST(FDB_BasicTest, Read_Ops)
 
     int _cnt = create_items_file(_eg_items);
     ASSERT_GE(_cnt, 0);
-
+    
     {
         std::string _data;
         // Trying to read when no data file is open

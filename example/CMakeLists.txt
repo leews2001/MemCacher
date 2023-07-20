@@ -5,7 +5,7 @@
 set(TEST_EXEC_NAME "test_MemCacher")
 
 # Add source to this project's executable.
-add_executable (${TEST_EXEC_NAME} "test_MemCacher.cpp"  "../incl/MemCacher.h")
+add_executable (${TEST_EXEC_NAME} "cacher.cpp"  "../incl/MemCacher.h")
 
 #include directories
  target_link_libraries(${TEST_EXEC_NAME} ${PROJECT_NAME} )

@@ -128,7 +128,7 @@ char MemCacher::x_add_cache_item(unsigned int key_, const CacheItem& item_)
 {
 	//--- sanity
 	if (m_cache.find(key_) != m_cache.end()) {
-		std::cerr << "Err: Attempt to add item to existing key: " << key_ << std::endl;
+		std::cerr << "[MC:x_add_cache_item] Err: Attempt to add item to existing key: " << key_ << std::endl;
 		return -1;
 	}
 
@@ -152,6 +152,7 @@ char MemCacher::x_add_cache_item(unsigned int key_, const CacheItem& item_)
 			m_cache_miss_write++;
 
 			if (m_file_db.write_data(_last_item.pos, _last_item.data) < 0) {
+				std::cerr << "[MC:x_add_cache_item] Err: fail to write to db\n";
 				_retn = -1;
 			}
 		}
@@ -249,9 +250,9 @@ char MemCacher::x_write_through_item(int pos_, const std::string& data_)
 		// So it is mark as 'dirty', so that when item is removed, it will be written to main.
 		CacheItem _item = { false, true, pos_, data_ };
 
-		//std::cout << "[MC] x_write-through pos: " << pos_ << std::endl;
+		 
 		char _retn0 = x_add_cache_item(pos_, _item);
-
+		 
 		if (_retn0 < 0) {
 			_retn = -1;
 		}
@@ -263,6 +264,7 @@ char MemCacher::x_write_through_item(int pos_, const std::string& data_)
 		}
 
 	}
+
 	return _retn;
 }
 

@@ -214,6 +214,7 @@ Project Link: [https://github.com/leews2001/MemCacher](https://github.com/leews2
 
 * [Implement Least Recently-Used Cache](https://www.enjoyalgorithms.com/blog/implement-least-recently-used-cache)
 
+* [How to Implement LRU Cache in Java](https://www.baeldung.com/java-lru-cache)
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [contributors-shield]: https://img.shields.io/github/contributors/github_username/repo_name.svg?style=for-the-badge
