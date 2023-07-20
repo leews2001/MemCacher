@@ -57,53 +57,41 @@ This project is to develop a simple concept program that performs caching of fre
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-
-### Built With
-
-This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
-
-* [![Bootstrap][Bootstrap.com]][Bootstrap-url]
-* [![JQuery][JQuery.com]][JQuery-url]
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
 <!-- GETTING STARTED -->
 ## Getting Started
 
 This is an example of how you may give instructions on setting up your project locally.
 To get a local copy up and running follow these simple example steps.
 
-### Requirements (Windows Only)
-
-The CMake support is directly integrated since Visual Studio 2017.
-
-- msvc
+### Requirements (Windows)
+- clang
     * [Install Visual Studio C++](https://learn.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=msvc-170#visual-studio-2022-installation)
+    * [Clang/LLVM support in Visual Studio projects: Installation](https://learn.microsoft.com/en-us/cpp/build/clang-support-msbuild?view=msvc-170#install-1)
 
-    or
-    * [Install Microsoft C++ Build Tools]( https://visualstudio.microsoft.com/visual-cpp-build-tools/)
 - cmake
-    * [CMake tools for Windows instructions](https://learn.microsoft.com/en-us/cpp/build/cmake-projects-in-visual-studio?view=msvc-170)
+    * The CMake support is directly integrated since Visual Studio 2017. [CMake projects in Visual Studio: Installation](https://learn.microsoft.com/en-us/cpp/build/cmake-projects-in-visual-studio?view=msvc-170#installation)
 
-### Requirements (Linux/Mac/Windows)
-- cmake
-    * All OSes: [click here for installation instructions](https://cmake.org/install/)
 - ninja
-    * 
+    * The CMake support is directly integrated since Visual Studio 2017
+
+### Requirements (Linux)
+- cmake
+    * [CMake installation instructions](https://cmake.org/install/)
+
+- ninja
+    * Linux: [Installing Ninja Build](https://installati.one/install-ninja-build-ubuntu-22-04/)
+
 - clang, or gcc/ g++
     * Linux: clang, or gcc/ g++ is installed by default on most Linux distros
-    * Mac: same deal as make - [install Xcode command line tools](https://developer.apple.com/xcode/features/)
-    * Windows: recommend using [MinGW](http://www.mingw.org/)
 
-### Build
+### Build (Windows)
+
+
+### Build (Linux)
 In the root directory (this repository), execute the command below:
 1. `mkdir build`
 2. `cmake --preset <preset_name>`
-3. `cd build\<preset_name>`
-4. `ninja`
-
+3. `cmake --build ./build/<preset_name> --clean-first`
 
 Where <preset_name> can be one of the following, depending on your platform and needs:
 
