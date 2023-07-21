@@ -319,6 +319,11 @@ Basic considerations of `cache misses`, `dirty cache`, `invalid cache`, and `cac
   - Reads data from file, at a given line number.
   - Write data to file, at a given line number. 
 
+- `tests/main.cpp`: `main()` for unit testing using `google-test`.
+- `tests/test_FileDB.h`: test cases for `FileDB`
+- `tests/test_MemCacher.h`: test cases for `MemCacher`
+- `test/test_helper.h`: helper functions.
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Repository Contents
