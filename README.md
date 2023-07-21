@@ -34,8 +34,11 @@
     <li><a href="#usage">Usage</a></li> 
     <li><a href="#project-design-details">Project Design Details</a>
     <ul>
-        <li><a href="#assumptions">Assumptions</a></li>
         <li><a href="#features">Features</a></li>
+        <li><a href="#design-considerations">Design Considerations</a></li>
+        <li><a href="#general-assumptions">General Assumptions</a></li>
+        <li><a href="#cache-events">Cache Events</a></li>
+        <li><a href="#files-and-classes">Files and Classes</a></li>
     </ul>
     </li>
     <li>
@@ -182,6 +185,11 @@ The project requires implementation of a simple class object (`MemCacher`)that f
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+### Design Considerations
+text
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ### General Assumptions
 The following assumptions are made about the reading and writing the data:
 - Since the given `items_file` example shows blank lines, we shall assume the data read from cache or file can be a empty string.
@@ -204,7 +212,7 @@ The following assumptions are made about the reading and writing the data:
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### Events
+### Cache Events
 
 Basic considerations of `cache misses`, `dirty cache`, `invalid cache`, and `cache full` have be taken care of. The following steps will be taken when such events occurs:
 
