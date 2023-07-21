@@ -209,30 +209,24 @@ The following assumptions are made about the reading and writing the data:
 Basic considerations of `cache misses`, `dirty cache`, `invalid cache`, and `cache full` have be taken care of. The following steps will be taken when such events occurs:
 
 - `Cache Miss`, Reader request a data not found in the cache. `MemCacher` obeject will attempt to read the data from `items_file` through `FileBD` object.
-    >- If `MemCacher` successfully read data from `FileDB`, it will write the data into cache, and update the Reader with the data;
+    >- If `MemCacher` successfully read data from `FileDB`, it will write the data into cache (See also `Cache Full`), and update the Reader with the data;
     >- Otherwise, `MemCacher` will update the Reader with error code.
 
-- `Invalid Cache`, Reader request a data that has been flagged `dirty` in cache.  `MemCacher` obeject will attempt to read the data from `items_file` through `FileBD` object.
+- `Invalid Cache`, Reader request a data that has been flagged `dirty` in cache.  `MemCacher` object will attempt to read the data from `items_file` through `FileBD` object.
     >- If `MemCacher` successfully read data from `FileDB`, it will update the data in the cache, set its `dirty` flag to FALSE, and update the Reader with the data;
     >- Otherwise, `MemCacher` will update the Reader with error code. 
 
-- `Dirty Cache`, Write request a write to a data found in the cache in `Write-through` mode.
+- `Dirty Cache`, Writer request a write to a data found in the cache in `Write-through` mode. Cached data is dirty, proceed to overwrite the cached data, `dirty` flag remains TRUE.
 
+- `Dirty Cache`, Reader request a read to a data found in the cache. Cached data is dirty, `MemCacher` object will attempt to read the data from `items_file` through `FileBD` object.
+    >- If `MemCacher` successfully read data from `FileDB`, it will update the data in the cache (See also `Cache Full`), set its `dirty` flag to FALSE, and update the Reader with the data;
+    >- Otherwise, `MemCacher` will update the Reader with error code.
 
+- `Cache Full`, `MemCacher` attempts to add data into cache but it is full.
+    >- Using the LRU scheme,the least-recently accessed cached item will be removed from cache.
+    >- The newly added data will be added as most-recently used.
 
  
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- Outline -->
-### Outline
-This program firstly takes command line options specified by the user and sets them to inner variables.
-
-It launches a thread which reads frames of the movie from the image file (if it's a photo, just one frame). In this thread, frames being read are sent to "image queue", as well as to "detection queue" once in a certain number of frames. This happens in `Graphic` class.
-
-Then the other thread is launched in `SSDModel` class, which obtains an image data from "detection queue" and performs object detection. The result is stored in a queue inside the class.
-
-After, in the main thread, image data in "image queue" is retrieved one by one. In that loop, once in a certain number of frames the result of the detection is updated by popping from the queue in `SSDModel`. The result of the detection is drawn on the image data. The image is shown in a window.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
