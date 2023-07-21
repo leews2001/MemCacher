@@ -90,7 +90,12 @@ int main(int argc, char* argv[])
 
 
     //-- use preload
-    bool _b_preload_file = true;
+
+    // _b_preload_file = true, <items_file> will be buffered into FileDB, instead of direct file I/O
+    // Set to false, if you want direct read/write to <items_file>, i.e., not using the buffer in FileDB.
+    bool _b_preload_file = true; 
+
+    // set  _b_cache_write_around_mode to FALSE, if you want to use write-through mode.
     bool _b_cache_write_around_mode = true;
 
     MemCacher _cacher((unsigned int)cacheSize, _b_preload_file);
@@ -164,11 +169,16 @@ int main(int argc, char* argv[])
     _cacher.show_cache();
 
     if (true == _b_preload_file) {
-        _cacher.flush("out.txt");
+        //_cacher.flush("out.txt");
+        _cacher.flush_fileDB();
     }
+
+    
 
     std::cout << "[main] readers: " << _readers_cnt << ", writers: "<< _writers_cnt << std::endl;
     _cacher.report();
+
+ 
 
     return 0;
 }
