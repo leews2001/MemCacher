@@ -199,9 +199,15 @@ This strategy is suitable for read-heavy scenario, especially when the same data
 
 #### Write-Around, Write-Through
 
+| ![](md_imgs/write-around.png)|
+|:--:| 
+| *Write-around illustration*|
+
 | ![](md_imgs/write-through.png)|
 |:--:| 
 | *Write-through illustration from "Caching Strategies and How to Choose the Right One" at codeahoy.com* |
+
+
 
 Since there is no assumption on whether `MemCacher` will be handling write-heavy or read-heavy scenarios, we are going implement both write-around and write-through schemes. This will be interesting for us to test and see how it affects occurence of different cache events.
 
@@ -215,6 +221,11 @@ A write-around scheme  would be beneificial for a occasional-write scenario, whe
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 #### LRU Scheme
+
+| ![](md_imgs/lru.png#)|
+|:--:| 
+| *LRU Scheme diagram from "LRU Cache Implementation" at medium.com* |
+
 It is assumed that there is no `look-ahead` attempts on the `readers` and `writers` files. Thus, there will be no information on future access patterns or the likelihood of certain items being accessed, which can be used to optimized the cache to reduces misses. Eviction of cached item during `Cache Full`  will be solely based on their past usage. Furthermore, we will assume that the past usage is indicative of future usage.
 
 Therefore, a simple Least-Recently-Used (LRU) scheme will be suitable for our implementation of `MemCacher`. The LRU is implemented using the following data containers in `MemCacher`:
@@ -397,6 +408,8 @@ Project Link: [https://github.com/leews2001/MemCacher](https://github.com/leews2
 * [Caching Strategies and How to Choose the Right One](https://codeahoy.com/2017/08/11/caching-strategies-and-how-to-choose-the-right-one/)
 
 * [Cache Replacement Policies](https://en.wikipedia.org/wiki/Cache_replacement_policies)
+
+* [LRU Cache Implementation](https://medium.com/@nishi_jain/lru-cache-implementation-a013bb58df54)
 
 * [Implement Least Recently-Used Cache](https://www.enjoyalgorithms.com/blog/implement-least-recently-used-cache)
 
