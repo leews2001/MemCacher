@@ -151,10 +151,6 @@ Each line of the file is either blank or contains one number. The positions in t
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-#### Output
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 #### Example
 
 `./test_memcacher 4 Readers.txt Writers.txt items.txt`
