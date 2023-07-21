@@ -187,8 +187,29 @@ The project requires implementation of a simple class object (`MemCacher`)that f
 
 ### Design Considerations
 
+#### Read-Through
+
+| ![](md_imgs/read-through.png)|
+|:--:| 
+| *Read-through illustration from "Caching Strategies and How to Choose the Right One" at codeahoy.com* |
+
+All data have to be through from the cache `MemCacher`. Any misses, the data have to be fetched from the file via `FileDB`.
+
+This strategy is suitable for read-heavy scenario, especially when the same data is access frequently. However, when the cached data becomes invalid (when using Write-Around scheme), the cached data have to be updated from file. Therefore, a write-heavy scenario could impact the Read-Through scheme.
+
 #### Write-Around, Write-Through
+
+| ![](md_imgs/write-through.png)|
+|:--:| 
+| *Write-through illustration from "Caching Strategies and How to Choose the Right One" at codeahoy.com* |
+
 Since there is no assumption on whether `MemCacher` will be handling write-heavy or read-heavy scenarios, we are going implement both write-around and write-through schemes. This will be interesting for us to test and see how it affects occurence of different cache events.
+
+A write-through scheme would be beneficial for heavy-read and heavy-write scenarios, since the cached data will be consistent (no invalid cached data).
+
+A write-around scheme  would be beneificial for a occasional-write scenario, where the cached item is less likely to become invalid.
+
+
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
