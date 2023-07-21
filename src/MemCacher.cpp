@@ -367,6 +367,7 @@ char MemCacher::x_update_item_in_cache(decltype(m_lru_q)::iterator &it_)
 		return -1;
 	}
 
+	// Remember to set the invalid flag to false, since we update the data already!
 	it_-> invalid = false;
 	it_-> data = _data0;
 	return 0;
