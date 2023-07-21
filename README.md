@@ -326,7 +326,7 @@ Basic considerations of `cache misses`, `dirty cache`, `invalid cache`, and `cac
 This repository contains:
 - `cmake/`: CMake scripts. 
 - `data/` : Sample data files that can be used.
-- `example` : Main program to use `MemCacher`
+- `example/` : Main program to use `MemCacher`
 - `incl/`: Header files listed above 
 - `md_imgs/`: Image data for README.md
 - `src/` : Source files listed above
