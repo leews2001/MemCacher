@@ -36,7 +36,7 @@
     <ul>
         <li><a href="#features">Features</a></li>
         <li><a href="#design-considerations">Design Considerations</a></li>
-        <li><a href="#general-assumptions">General Assumptions</a></li>
+        <li><a href="#other-general-assumptions">Other General Assumptions</a></li>
         <li><a href="#cache-events">Cache Events</a></li>
         <li><a href="#files-and-classes">Files and Classes</a></li>
     </ul>
@@ -186,11 +186,35 @@ The project requires implementation of a simple class object (`MemCacher`)that f
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Design Considerations
-text
+
+#### Write-Around, Write-Through
+Since there is no assumption on whether `MemCacher` will be handling write-heavy or read-heavy scenarios, we are going implement both write-around and write-through schemes. This will be interesting for us to test and see how it affects occurence of different cache events.
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### General Assumptions
+#### LRU Scheme
+It is assumed that there is no `look-ahead` attempts on the `readers` and `writers` files. Thus, there will be no information on future access patterns or the likelihood of certain items being accessed, which can be used to optimized the cache to reduces misses. Eviction of cached item during `Cache Full`  will be solely based on their past usage. Furthermore, we will assume that the past usage is indicative of future usage.
+
+Therefore, a simple Least-Recently-Used (LRU) scheme will be suitable for our implementation of `MemCacher`. The LRU is implemented using the following data containers in `MemCacher`:
+    
+    ///< list of least-recently-used items.
+    std::list<CacheItem> m_lru_q; 
+
+    ///< map to store iterators of cache items.
+    std::unordered_map<int, decltype(m_lru_q)::iterator> m_cache; 
+    
+
+The first item in `m_lru_q` will be the most recently accessed cache item.
+The least-frequently used item will be at the back of `m_lru_q`. (Note: `m_lru_q` must be a std::list container as we want all iterators and references unaffected by erase and insertion operations)
+
+Whenever a `CacheItem` is accessed or added, it will be removed in re-inserted to the front of the `m_lru_q` list.
+
+Whenever an eviction is required, the last item in `m_lru_q` list will be removed.
+
+The `m_cache` map contains paired data, a key and a iterator, which allows us to have quick reference to the CacheItem in the std::list, given a key. 
+
+### Other General Assumptions
 The following assumptions are made about the reading and writing the data:
 - Since the given `items_file` example shows blank lines, we shall assume the data read from cache or file can be a empty string.
 
