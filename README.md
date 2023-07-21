@@ -423,4 +423,4 @@ Project Link: [https://github.com/leews2001/MemCacher](https://github.com/leews2
 [issues-url]: https://github.com/github_username/repo_name/issues
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/wei-siong-lee-8bb154141
-[product-screenshot]: images/screenshot.png
+
