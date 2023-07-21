@@ -19,6 +19,13 @@ public:
     * @param cache_size_ size of the cache.
     */
     FileDB();
+
+
+    /**
+     * @brief will flush any updated buffer to opened data file, if preload == true
+     */
+    void flush();
+
     /**
      * @brief Prints a report about the FileDB status.
      */
@@ -124,6 +131,14 @@ protected:
      * @return The character written to the file.
      */
     char x_write_file(int pos_, const std::string& data_);
+
+    /**
+     * @brief Flushes the buffer content to a file.
+     *
+     * @param data_filename_ The name of the data file to write the buffer contents to.
+     * @return An optional integer indicating the number of items flushed or failure (empty).
+     */
+    std::optional <int>  x_flush_buffer_to_file(const std::string& data_filename_);
 
 private:
     bool mb_preload = false;

@@ -21,7 +21,43 @@ void FileDB::report()
 	return;
 }
 
+/**
+ *  @brief will flush any updated buffer to opened data file, if preload == true 
+ * 
+ */
+void FileDB::flush()
+{
+	if (false == mb_preload) {
+		return;
+	}
 
+	std::string _tmp_filename("_temp12345.txt");
+
+	if (false == x_flush_buffer_to_file(_tmp_filename).has_value()) {
+		std::cerr << "[FileDB] error flushing buffer!\n";
+		return;
+	}
+
+	std::remove(m_data_filename.c_str());
+
+	if (0 != std::rename(_tmp_filename.c_str(), m_data_filename.c_str())) {
+		std::perror("[FileDB::flush] Error renaming temp file");
+		return;
+	}
+
+	m_data_file.open(m_data_filename, std::ios::in | std::ios::out);
+	if (!m_data_file) {
+		std::cerr << "[FileDB::flush] Error opening <" << m_data_filename << "\n";
+		return;
+	}
+
+	return;
+}
+
+/**
+ * @brief Open Data File, preload into buffer if necessary.
+ *
+ */
 std::optional<char> FileDB::open_data_file(const std::string& data_filename_)
 {
 	if (!std::ifstream(data_filename_)) {
@@ -42,8 +78,23 @@ std::optional<char> FileDB::open_data_file(const std::string& data_filename_)
 	return 0;
 }
  
-
+/**
+ * @brief Flush data in buffer to file
+ * @param Ouput filename
+ *
+ */
 std::optional <int>  FileDB::flush_buffer_to_file(const std::string& out_filename_)
+{
+	return x_flush_buffer_to_file(out_filename_);
+}
+
+
+/**
+ * @brief Flush data in buffer to file
+ * @param Ouput filename
+ *
+ */
+std::optional <int>  FileDB::x_flush_buffer_to_file(const std::string& out_filename_)
 {
 	std::ofstream _out_file(out_filename_);
 
@@ -77,7 +128,11 @@ std::optional <int>  FileDB::flush_buffer_to_file(const std::string& out_filenam
 	return _cnt;
 }
 
-
+/**
+ * @brief Read Data from  file
+ * @param pos_, read position, must be greater than zero
+ * @param route_data_, read data
+ */
 std::optional<char>  FileDB::read_data(int pos_, std::string& rout_data_)
 {
 	if (pos_ < 1) {
@@ -92,6 +147,11 @@ std::optional<char>  FileDB::read_data(int pos_, std::string& rout_data_)
 	return x_read_file(pos_, rout_data_); 
 }
 
+/**
+ * @brief Read Data from buffer
+ * @param pos_, read position, must be greater than zero
+ * @param route_data_, read data
+ */
 std::optional<char> FileDB::x_read_buffer(int pos_, std::string& rout_data_)
 {
 	if (m_preload_buffer.find(pos_) == m_preload_buffer.end()) {
