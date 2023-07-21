@@ -155,8 +155,11 @@ Each line of the file is either blank or contains one number. The positions in t
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 #### Example
+From the `build/<preset_name>` folder in terminal, execute the following command:
 
-`./test_memcacher 4 Readers.txt Writers.txt items.txt`
+`./cacher 4 Readers.txt Writers.txt items.txt`
+
+Note that the `items_file` ( `items.txt` in this example) will be modified and updated with the latest data modified/added at the end of program.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
