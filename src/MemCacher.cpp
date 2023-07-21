@@ -18,6 +18,15 @@ std::optional <char> MemCacher::open_data_file(const std::string& item_filename_
 	return m_file_db.open_data_file(item_filename_);
 }
 
+/**
+ * @brief Will force fileDB to flush its buffer, if using preload mode.
+ */
+void MemCacher::flush_fileDB()
+{
+	m_file_db.flush();
+	return;
+}
+
 
 /**
  * @brief Reports cache statistics.
@@ -374,7 +383,7 @@ char MemCacher::x_update_item_in_cache(decltype(m_lru_q)::iterator &it_)
 }
 
 /**
- * @brief  
+ * @brief  retrieve data from file manager
  *
  * @param key_ The key of the cache item.
  * @return '0' if ok, otherwise if error.
@@ -397,6 +406,11 @@ char MemCacher::x_read_item_from_filedb(int key_, std::string& rout_data_)
 	return _retn;
 	 
 }
+
+/**
+ * @brief  Show Cache Content
+ *
+ */
 void MemCacher::show_cache()
 {
 	std::unique_lock<std::mutex> _lock(m_mutex);
@@ -405,6 +419,10 @@ void MemCacher::show_cache()
 	return;
 }
 
+/**
+ * @brief  Show Cache Content
+ *
+ */
 void MemCacher::x_show_cache()
 {
 	std::cout << "[MC:Show Cache] Size: "<< m_cache.size() <<"\n";
@@ -424,6 +442,10 @@ void MemCacher::x_show_cache()
 	return;
 }
 
+/**
+ * @brief  Update cache items from FileDB that is flagged `invalid`
+ *
+ */
 void MemCacher::update_invalid_cache()
 {
 	std::unique_lock<std::mutex> _lock(m_mutex);

@@ -56,6 +56,10 @@ public:
     bool write_around_mode() const { return mb_write_around; }
 
     /**
+     * @brief Will force fileDB to flush its buffer, if using preload mode.
+     */
+    void flush_fileDB();
+    /**
      * @brief Reports cache statistics.
      */
     void report();
