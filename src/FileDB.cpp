@@ -56,7 +56,8 @@ void FileDB::flush()
 
 /**
  * @brief Open Data File, preload into buffer if necessary.
- *
+ * @param data_filename_, name of file to open
+ * @return 0: ok, othewise: error
  */
 std::optional<char> FileDB::open_data_file(const std::string& data_filename_)
 {
@@ -80,8 +81,8 @@ std::optional<char> FileDB::open_data_file(const std::string& data_filename_)
  
 /**
  * @brief Flush data in buffer to file
- * @param Ouput filename
- *
+ * @param out_filename_ The name of the data file to write the buffer contents to.
+ * @return int:number of items written, nullopt: error
  */
 std::optional <int>  FileDB::flush_buffer_to_file(const std::string& out_filename_)
 {
@@ -90,9 +91,9 @@ std::optional <int>  FileDB::flush_buffer_to_file(const std::string& out_filenam
 
 
 /**
- * @brief Flush data in buffer to file
- * @param Ouput filename
- *
+ * @brief Flushes the buffer content to a file.
+ * @param out_filename_ The name of the data file to write the buffer contents to.
+ * @return int: number of items written, nullopt: error
  */
 std::optional <int>  FileDB::x_flush_buffer_to_file(const std::string& out_filename_)
 {
@@ -129,9 +130,10 @@ std::optional <int>  FileDB::x_flush_buffer_to_file(const std::string& out_filen
 }
 
 /**
- * @brief Read Data from  file
+ * @brief Read Data from DataBase
  * @param pos_, read position, must be greater than zero
- * @param route_data_, read data
+ * @param rout_data_ The output string to store the read data.
+ * @return 0: ok, otherwise: error
  */
 std::optional<char>  FileDB::read_data(int pos_, std::string& rout_data_)
 {
@@ -150,7 +152,8 @@ std::optional<char>  FileDB::read_data(int pos_, std::string& rout_data_)
 /**
  * @brief Read Data from buffer
  * @param pos_, read position, must be greater than zero
- * @param route_data_, read data
+ * @param rout_data_ The output string to store the read data.
+ * @return 0: ok, otherwise: error
  */
 std::optional<char> FileDB::x_read_buffer(int pos_, std::string& rout_data_)
 {
@@ -163,6 +166,12 @@ std::optional<char> FileDB::x_read_buffer(int pos_, std::string& rout_data_)
 	return 0; 
 }
 
+/**
+ * @brief Read Data from file
+ * @param pos_, read position, must be greater than zero
+ * @param rout_data_ The output string to store the read data.
+ * @return 0: ok, otherwise: error
+ */
 std::optional<char> FileDB::x_read_file(int pos_, std::string& rout_data_)
 {
 	if (!m_data_file) {
@@ -222,13 +231,24 @@ char FileDB::write_data(int pos_, const std::string& data_)
 	return _retn;
 }
 
+/**
+ * @brief Writes data to the buffer.
+ *
+ * @param pos_ The position in the buffer to write data to.
+ * @param data_ The data to be written to the buffer.
+ */
 void FileDB::x_write_buffer(int pos_, const std::string& data_)
 {
 	m_preload_buffer[pos_] = data_;
 	return;
 }
-
-
+/**
+ * @brief Writes data to the file.
+ *
+ * @param pos_ The position in the file to write data to.
+ * @param data_ The data to be written to the file.
+ * @return 0: ok, -1: error
+ */
 char FileDB::x_write_file(int pos_, const std::string& data_)
 {
 	if (!m_data_file.is_open()) {
@@ -296,11 +316,10 @@ char FileDB::x_write_file(int pos_, const std::string& data_)
 
 
 /**
- * @brief load items in file to 'main memory'
+ * @brief Preloads a file into the buffer.
  *
- * @param itemsFile_ The file name of the items to be attached.
- *
- * @return True if the file was successfully attached, false otherwise.
+ * @param data_filename_ The name of the data file to preload.
+ * @return True: if the file was successfully attached, False: error
  */
 bool FileDB::x_preload_file_to_buffer(const std::string& data_filename_)
 {

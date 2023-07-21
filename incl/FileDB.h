@@ -54,27 +54,24 @@ public:
     int preload_buffer_size() const { return m_preload_buffer.size(); }
 
     /**
-     * @brief Opens a data file and loads it into the buffer.
-     *
-     * @param data_filename_ The name of the data file to open.
-     * @return An optional character indicating success (true) or failure (false).
+     * @brief Open Data File, preload into buffer if necessary.
+     * @param data_filename_, name of file to open
+     * @return 0: ok, othewise: error
      */
     [[nodiscard]] std::optional<char> open_data_file(const std::string& data_filename_);
 
     /**
-     * @brief Flushes the buffer content to a file.
-     *
-     * @param data_filename_ The name of the data file to write the buffer contents to.
-     * @return An optional integer indicating the number of items flushed or failure (empty).
-     */
+   * @brief Flush data in buffer to file
+   * @param out_filename_ The name of the data file to write the buffer contents to.
+   * @return int:number of items written, nullopt: error
+   */
     std::optional <int>  flush_buffer_to_file(const std::string& data_filename_);
 
     /**
-     * @brief Reads data from the buffer.
-     *
-     * @param pos_ The position in the buffer to read data from.
+     * @brief Read Data from DataBase
+     * @param pos_, read position, must be greater than zero
      * @param rout_data_ The output string to store the read data.
-     * @return 0: sucess, nullopt: otherwise
+     * @return 0: ok, otherwise: error
      */
     [[nodiscard]] std::optional<char>  read_data(int pos_, std::string& rout_data_);
 
@@ -93,25 +90,24 @@ protected:
      * @brief Preloads a file into the buffer.
      *
      * @param data_filename_ The name of the data file to preload.
-     * @return True if the preload was successful, false otherwise.
+     * @return True: if the file was successfully attached, False: error
      */
     bool x_preload_file_to_buffer(const std::string& data_filename_);
 
     /**
-     * @brief Reads data from the buffer.
-     *
-     * @param pos_ The position in the buffer to read data from.
+     * @brief Read Data from buffer
+     * @param pos_, read position, must be greater than zero
      * @param rout_data_ The output string to store the read data.
-     * @return An optional character indicating success (true) or failure (false).
+     * @return 0: ok, otherwise: error
      */
     std::optional<char> x_read_buffer(int pos_, std::string& rout_data_);
 
+
     /**
-     * @brief Reads data from the file.
-     *
-     * @param pos_ The position in the file to read data from.
+     * @brief Read Data from file
+     * @param pos_, read position, must be greater than zero
      * @param rout_data_ The output string to store the read data.
-     * @return An optional character indicating success (true) or failure (false).
+     * @return 0: ok, otherwise: error
      */
     std::optional<char> x_read_file(int pos_, std::string& rout_data_);
 
@@ -128,20 +124,19 @@ protected:
      *
      * @param pos_ The position in the file to write data to.
      * @param data_ The data to be written to the file.
-     * @return The character written to the file.
+     * @return 0: ok, -1: error
      */
     char x_write_file(int pos_, const std::string& data_);
 
     /**
      * @brief Flushes the buffer content to a file.
-     *
-     * @param data_filename_ The name of the data file to write the buffer contents to.
-     * @return An optional integer indicating the number of items flushed or failure (empty).
+     * @param out_filename_ The name of the data file to write the buffer contents to.
+     * @return integer number of items written, nullopt: error
      */
-    std::optional <int>  x_flush_buffer_to_file(const std::string& data_filename_);
+    std::optional <int>  x_flush_buffer_to_file(const std::string& out_filename_);
 
 private:
-    bool mb_preload = false;
+    bool mb_preload = false;   ///< preload file to buffer if TRUE
     int m_initial_largest_item_key = 0;  ///<  initial largest key in m_main_mem. Valid keys are greater than zero.
     int m_largest_item_key = 0;  ///< largest key in m_main_mem. Valid keys are greater than zero.
 
