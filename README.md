@@ -170,14 +170,29 @@ To use `Memcacher` in your C++ project, you need to include the `MemCacher.h` he
  
 ## Project Design Details
 
+The project requires implementation of a simple class object (`MemCacher`)that functions like a memory cache, accepting read/ write requests from multiple threads.
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### Assumptions
-The following assumptions are made:
+### Features
+
+- LRU (Least-Recently-Used) Cache Scheme: `MemCacher` uses the LRU scheme to ensure that the most recently accessed items are retained in the cache while older and less frequently accessed items are evicted from the cache.
+
+- Read- and Write-Through Cache Scheme: The `MemCacher` supports read- and write-through caching, meaning it automatically loads data from file, via `FileDB` when a `cache miss` or `invalid cache` occurs during read access; and writes dirty cache items back to disk upon eviction.
+
+- Write-Around Cache Scheme: The `MemCacher` supports write-around caching, meaning when a write request is received, it will writes directly to file, via `FileDB`, by-passing the cache. If the data is currently in the cache, it will be flagged as `invalid`. 
+
+- Thread-Safe: `MemCacher` is designed to be thread-safe, allowing multiple threads to access the cache concurrently without causing data corruption or race conditions.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### General Assumptions
+The following assumptions are made about the reading and writing the data:
+- Since the given `items_file` example shows blank lines, we shall assume the data read from cache or file can be a empty string.
+
+- Subsequently, data from `items_file` can be non-numbers.
 
 - The first line in the `items_file` is taken to be position `1`. Therefore, the keys associated with each paired string data must be an integer greater than zero.
-
-- Since the given `items_file` example shows blank lines, we shall assume the data read from cache or file can be a empty string.
  
 - Subsquently, the data written to cache or file can be a empty string.
 
@@ -191,15 +206,23 @@ The following assumptions are made:
 
 - When a position value read from `writers` file is less than 1, the write request shall be ignored.
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### Events
+
+Basic considerations of `cache misses`, `dirty cache`, `invalid cache`, and `cache full` have be taken care of. The following steps will be taken when such events occurs:
+
+- `Cache Miss`, Reader request a data not found in the cache. `MemCacher` obeject will attempt to read the data from `items_file` through `FileBD` object.
+    >- If `MemCacher` successfully read data from `FileDB`, it will write the data into cache, and update the Reader with the data;
+    >- Otherwise, `MemCacher` will update the Reader with error code.
+
+- `Invalid Cache`, Reader request a data that has been flagged `dirty` in cache.  `MemCacher` obeject will attempt to read the data from `items_file` through `FileBD` object.
+    >- If `MemCacher` successfully read data from `FileDB`, it will update the data in the cache, set its `dirty` flag to FALSE, and update the Reader with the data;
+    >- Otherwise, `MemCacher` will update the Reader with error code. 
+
+- `Dirty Cache`, Write request a write to a data found in the cache in `Write-through` mode.
 
 
-### Features
-
-- LRU (Least Recently Used) Cache: Memcacher uses the LRU algorithm to manage cache items, ensuring that the most recently accessed items are retained in memory while older, less frequently used items are evicted from the cache.
-
-- Read and Write Through Cache: The Memcacher supports read and write through caching, meaning it automatically loads data from disk when a cache miss occurs during read access and writes dirty cache items back to disk upon eviction.
-
-- Thread-Safe: Memcacher is designed to be thread-safe, allowing multiple threads to access the cache concurrently without causing data corruption or race conditions.
 
  
 
