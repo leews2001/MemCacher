@@ -330,7 +330,7 @@ This repository contains:
 - `incl/`: Header files listed above 
 - `md_imgs/`: Image data for README.md
 - `src/` : Source files listed above
-- `tests/`: Source files for unit testing.
+- `tests/`: Source files for unit testing (dep. `google-test`).
 - `CMakePresets.json`: file to define and manage different build configurations for a cmake project.
 - `CMakeLists.txt` : cmake configuration file
 - `README.md` : This file
